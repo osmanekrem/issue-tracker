@@ -6,7 +6,7 @@ import {auth} from "./lib/auth";
 import {Hono} from "hono";
 import {cors} from "hono/cors";
 import {logger} from "hono/logger";
-import { handle } from 'hono/vercel'
+import { handle } from '@hono/node-server/vercel';
 
 const app = new Hono();
 
