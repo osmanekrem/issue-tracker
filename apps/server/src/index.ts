@@ -6,7 +6,6 @@ import {auth} from "./lib/auth";
 import {Hono} from "hono";
 import {cors} from "hono/cors";
 import {logger} from "hono/logger";
-import { handle } from '@hono/node-server/vercel';
 
 const app = new Hono();
 
@@ -32,4 +31,4 @@ app.get("/", (c) => {
     return c.text("OK");
 });
 
-export default handle(app);
+export default app

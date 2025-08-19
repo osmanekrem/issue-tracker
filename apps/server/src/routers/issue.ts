@@ -1,11 +1,11 @@
-import {protectedProcedure, router} from "@/lib/trpc";
-import {createIssueRequestSchema, updateIssueRequestSchema} from "@/schemas/issue";
-import {successResponse} from "@/utils/response";
-import {db} from "@/db";
-import {issue, priority, status} from "@/db/schema/issue";
+import {protectedProcedure, router} from "../lib/trpc";
+import {createIssueRequestSchema, updateIssueRequestSchema} from "../schemas/issue";
+import {successResponse} from "../utils/response";
+import {db} from "../db";
+import {issue, priority, status} from "../db/schema/issue";
 import {z} from "zod";
-import {desc, eq} from "drizzle-orm"
-import {getIssues} from "@/utils/issues";
+import { eq} from "drizzle-orm"
+import {getIssues} from "../utils/issues";
 
 
 

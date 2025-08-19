@@ -1,7 +1,7 @@
 import {initTRPC, TRPCError} from "@trpc/server";
 import type {Context} from "./context";
 import {z, ZodError} from "zod";
-import {errorResponse} from "@/utils/response";
+import {errorResponse} from "../utils/response";
 
 export const t = initTRPC.context<Context>().create({
     errorFormatter({shape, error}) {

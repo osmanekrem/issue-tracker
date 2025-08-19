@@ -1,9 +1,9 @@
 import {and, asc, count, desc, eq} from "drizzle-orm";
-import {db} from "@/db";
-import {issue, priority, status} from "@/db/schema/issue";
+import {db} from "../db";
+import {issue, priority, status} from "../db/schema/issue";
 import {alias} from "drizzle-orm/pg-core";
-import {user} from "@/db/schema/auth";
-import {project} from "@/db/schema/project";
+import {user} from "../db/schema/auth";
+import {project} from "../db/schema/project";
 
 export interface GetIssuesOptions {
     filters?: {

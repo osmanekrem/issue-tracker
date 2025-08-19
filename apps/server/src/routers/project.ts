@@ -1,12 +1,12 @@
-import {protectedProcedure, router} from "@/lib/trpc";
-import {createProjectSchema, updateProjectSchema} from "@/schemas/project";
-import {db} from "@/db";
-import {project} from "@/db/schema/project";
-import {successResponse} from "@/utils/response";
+import {protectedProcedure, router} from "../lib/trpc";
+import {createProjectSchema, updateProjectSchema} from "../schemas/project";
+import {db} from "../db";
+import {project} from "../db/schema/project";
+import {successResponse} from "../utils/response";
 import {z} from "zod";
 import {count, desc, eq} from "drizzle-orm";
-import {user} from "@/db/schema/auth";
-import {paginationRequestSchema} from "@/schemas/pagination";
+import {user} from "../db/schema/auth";
+import {paginationRequestSchema} from "../schemas/pagination";
 
 export const projectRouter = router({
     createProject: protectedProcedure.input(createProjectSchema).mutation(async ({ctx, input}) => {

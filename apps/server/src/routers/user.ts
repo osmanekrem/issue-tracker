@@ -1,10 +1,9 @@
-import {protectedProcedure, router} from "@/lib/trpc";
-import {z} from "zod";
-import {db} from "@/db";
-import {user} from "@/db/schema/auth";
+import {protectedProcedure, router} from "../lib/trpc";
+import {db} from "../db";
+import {user} from "../db/schema/auth";
 import {eq} from "drizzle-orm";
-import {getUserByIdRequestSchema} from "@/schemas/user";
-import {successResponse} from "@/utils/response";
+import {getUserByIdRequestSchema} from "../schemas/user";
+import {successResponse} from "../utils/response";
 
 export const userRouter = router({
     me: protectedProcedure.query(({ctx}) => {
