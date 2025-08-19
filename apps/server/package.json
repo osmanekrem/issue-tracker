@@ -1,6 +1,7 @@
 {
   "name": "server",
   "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "build": "tsdown",
     "check-types": "tsc -b",

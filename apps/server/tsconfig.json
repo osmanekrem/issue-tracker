@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
     "strict": true,
     "skipLibCheck": true,
