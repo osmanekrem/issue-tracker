@@ -4,31 +4,39 @@ import { join } from 'path';
 
 const outDir = '.vercel/output';
 
-console.log('--- Vercel Build Script Başlatıldı ---');
+console.log('--- Vercel Build Betiği Başlatıldı ---');
 
-console.log('Turborepo ile tüm uygulamalar derleniyor...');
 execSync('bun turbo run build', { stdio: 'inherit' });
 
-console.log(`Eski çıktı klasörü (${outDir}) temizleniyor...`);
 rmSync(outDir, { recursive: true, force: true });
 
-const functionsDir = join(outDir, 'functions/index.func');
-const staticDir = join(outDir, 'static');
-mkdirSync(functionsDir, { recursive: true });
-mkdirSync(staticDir, { recursive: true });
-console.log('Vercel çıktı klasör yapısı oluşturuldu.');
 
-console.log('Backend dosyaları kopyalanıyor...');
+const functionsDir = join(outDir, 'functions/index.func');
+mkdirSync(functionsDir, { recursive: true });
+
+
 cpSync('apps/server/dist/', functionsDir, { recursive: true });
 
-console.log('Frontend dosyaları kopyalanıyor...');
-cpSync('apps/web/dist/', staticDir, { recursive: true });
 
-const config = {
+const functionConfig = {
+    runtime: 'edge',
+    entrypoint: 'index.js',
+};
+writeFileSync(
+    join(functionsDir, '.vc-config.json'),
+    JSON.stringify(functionConfig)
+);
+console.log('.vc-config.json fonksiyon yapılandırması oluşturuldu.');
+
+cpSync('apps/web/dist/', join(outDir, 'static'), { recursive: true });
+console.log('Frontend dosyaları static klasörüne kopyalandı.');
+
+
+const vercelConfig = {
     version: 3,
     routes: [{ src: '/(.*)', dest: '/index' }],
 };
-writeFileSync(join(outDir, 'config.json'), JSON.stringify(config));
-console.log('config.json oluşturuldu.');
+writeFileSync(join(outDir, 'config.json'), JSON.stringify(vercelConfig));
+console.log('config.json yönlendirme dosyası oluşturuldu.');
 
-console.log('--- Vercel Build Script Tamamlandı ---');
+console.log('\n--- Vercel Build Betiği Başarıyla Tamamlandı ---');
