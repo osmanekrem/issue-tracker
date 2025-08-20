@@ -6,6 +6,8 @@ import {auth} from "./lib/auth";
 import {Hono} from "hono";
 import {cors} from "hono/cors";
 import {logger} from "hono/logger";
+import {serveStatic} from "@hono/node-server/serve-static";
+import { serve } from '@hono/node-server';
 
 const app = new Hono();
 
@@ -27,8 +29,25 @@ app.use("/trpc/*", trpcServer({
     },
 }));
 
-app.get("/", (c) => {
-    return c.text("OK");
+app.use(
+    '*',
+    serveStatic({
+        root: './apps/web/dist',
+    })
+);
+
+app.get(
+    '*',
+    serveStatic({
+        path: './apps/web/dist/index.html',
+    })
+);
+
+const port =  3000;
+console.log('Sunucu başlatılıyor: http://localhost:' + port);
+
+serve({
+    fetch: app.fetch,
+    port,
 });
 
-export default app
