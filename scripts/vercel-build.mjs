@@ -19,8 +19,8 @@ cpSync('apps/server/dist/', functionsDir, { recursive: true });
 
 
 const functionConfig = {
-    runtime: 'edge',
-    entrypoint: 'index.js',
+    runtime: 'nodejs20.x',
+    handler: 'index.js',
 };
 writeFileSync(
     join(functionsDir, '.vc-config.json'),
