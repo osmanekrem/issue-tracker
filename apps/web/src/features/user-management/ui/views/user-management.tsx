@@ -3,11 +3,11 @@ import {buttonVariants} from "@/components/ui/button";
 import {PlusIcon} from "lucide-react";
 import {DataTable, type TableOptions, turkishTranslations} from "tanstack-shadcn-table";
 import UserAvatar from "@/components/user-avatar";
-import {authClient, type User} from "@/lib/auth-client";
+import { type User} from "@/lib/auth-client";
 import {useState} from "react";
-import ActionMenu from "@/features/user-management/ui/components/action-menu";
 import {useQuery} from "@tanstack/react-query";
 import {getUsersQuery} from "@/features/user-management/lib/queries";
+import ActionMenu from "@/components/action-menu";
 
 export default function UserManagement() {
     const [limit, setLimit] = useState<number>(20);
@@ -29,7 +29,7 @@ export default function UserManagement() {
                 minSize: 60,
                 maxSize: 60,
                 enableResizing: false,
-                cell: ({row}) => <ActionMenu rowData={row.original}/>,
+                cell: ({row}) => <ActionMenu rowData={row.original} name="Kullanıcıyı" editUrl="/user-management/edit-user/$id"/>,
             },
             {
                 accessorKey: "name",

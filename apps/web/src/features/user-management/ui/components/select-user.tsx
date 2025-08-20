@@ -6,17 +6,10 @@ import type {User} from "@/lib/auth-client";
 export default function SelectUser({...props}) {
     const {data: users, isLoading} = useUsers()
 
-    if (isLoading) {
-        return <Select disabled>
-            <SelectTrigger>
-                <SelectValue placeholder="Kullanıcılar yükleniyor..." />
-            </SelectTrigger>
-        </Select>;
-    }
     return (
         <Select {...props} disabled={isLoading || props?.disabled}>
                 <SelectTrigger className="w-full !h-12" >
-                    <SelectValue placeholder="Kullanıcı Seçiniz"  />
+                    <SelectValue placeholder={isLoading ? "Yükleniyor..." : "Kullanıcı Seçiniz"}  />
                 </SelectTrigger>
             <SelectContent>{(
                     users?.data?.users.map((user) => (

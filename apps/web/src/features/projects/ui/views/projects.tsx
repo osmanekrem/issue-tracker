@@ -8,7 +8,7 @@ import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import { getProjectsQuery} from "@/features/projects/lib/queries";
 import type {Project} from "@/features/projects/types";
-import ActionMenu from "@/features/projects/ui/components/action-menu";
+import ActionMenu from "@/components/action-menu";
 
 export default function Projects() {
     const [limit, setLimit] = useState<number>(20);
@@ -30,7 +30,7 @@ export default function Projects() {
                 minSize: 60,
                 maxSize: 60,
                 enableResizing: false,
-                cell: ({row}) => <ActionMenu rowData={row.original}/>,
+                cell: ({row}) => <ActionMenu rowData={row.original} name="Projeyi" editUrl="/projects/edit-project/$id"/>,
             },
             {
                 accessorKey: "title",

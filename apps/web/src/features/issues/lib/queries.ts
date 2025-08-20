@@ -5,7 +5,7 @@ import type {Issue} from "@/features/issues/types";
 import type {CreateIssueSchema} from "@/features/issues/schemas";
 import type {EditIssueSchema} from "@/features/issues/schemas";
 
-export const getIssuesPaginatedQuery  = (limit: number, offset: number) => queryOptions({
+export const getIssuesPaginatedQuery  = (limit: number, offset: number, ...options: unknown[]) => queryOptions({
     queryKey: ['issue'],
     queryFn: () => {
         if (limit <= 0) {
@@ -15,7 +15,8 @@ export const getIssuesPaginatedQuery  = (limit: number, offset: number) => query
             pagination: {
                 limit,
                 offset
-            }
+            },
+            ...options,
         })
     }
 })

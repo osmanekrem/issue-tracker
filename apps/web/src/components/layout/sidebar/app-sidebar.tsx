@@ -25,7 +25,6 @@ export default function AppSidebar() {
         <Sidebar collapsible="icon">
             <SidebarHeader>
                 <SidebarMenuButton size="lg"
-                                   onClick={toggleSidebar}
                                    className="relative flex w-full items-center group/trigger justify-start overflow-hidden">
                     {open ? (
                         <>
@@ -39,19 +38,16 @@ export default function AppSidebar() {
                             <span className="absolute bottom-2 right-6 w-2 h-2 z-0 bg-blue-500"></span>
 
                             <span className="absolute bottom-2 right-10 w-2 h-2 z-0 bg-blue-500"></span>
-                            <SidebarCloseIcon
-                                className="absolute z-10 right-2 top-1/2 -translate-y-1/2 !size-5 opacity-0 group-hover/trigger:opacity-100 transition-all"/>
+
 
                         </>
                     ) : (
                         <>
-                            <p className={"font-extrabold group-hover/trigger:opacity-0 text-xl leading-8 z-10 flex w-full text-center justify-center text-nowrap tracking-tight"}>
+                            <p className={"font-extrabold text-xl leading-8 z-10 flex w-full text-center justify-center text-nowrap tracking-tight"}>
                                 <BugIcon className="!size-5" />
                             </p>
 
                             <span className="absolute bottom-2 left-0 w-full h-2 z-0 bg-blue-500"></span>
-                            <SidebarOpenIcon
-                                className=" absolute z-10 top-1/2 -translate-y-1/2 left-1/2 !size-5 -translate-x-1/2 opacity-0 group-hover/trigger:opacity-100 transition-all"/>
                         </>
                     )}
 

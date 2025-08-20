@@ -6,17 +6,10 @@ import {cn} from "@/lib/utils";
 export default function SelectPriority({...props}) {
     const {data: priorities, isLoading} = usePriorities();
 
-    if (isLoading) {
-        return <Select disabled>
-            <SelectTrigger className="w-full !h-12">
-                <SelectValue placeholder="Öncelikler yükleniyor..." />
-            </SelectTrigger>
-        </Select>;
-    }
     return (
         <Select {...props} disabled={isLoading || props?.disabled}>
             <SelectTrigger className="w-full !h-12" >
-                <SelectValue placeholder="Öncelik Seçiniz"  />
+                <SelectValue placeholder={isLoading ? "Yükleniyor..." : "Öncelik Seçiniz"}  />
             </SelectTrigger>
             <SelectContent>{(
                 priorities?.data?.map((priority) => (

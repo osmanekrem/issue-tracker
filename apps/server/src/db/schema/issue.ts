@@ -32,11 +32,11 @@ export const issue = pgTable("issue",{
 export const status = pgTable("status", {
     id: text("id").primaryKey(),
     name: varchar("name", {length: 50}).notNull(),
-    color: varchar("color", {length: 7}).notNull(),
+    color: varchar("color", {length: 20}).notNull(),
 });
 
 export const priority = pgTable("priority", {
     id: text("id").primaryKey(),
     name: varchar("name", {length: 50}).notNull(),
-    color: varchar("color", {length: 7}).notNull(),
+    color: varchar("color", {length: 20}).notNull(),
 });

@@ -1,5 +1,12 @@
 FROM oven/bun:1 as builder
 ENV TURBO_CI=true
+
+ARG VITE_SERVER_URL
+ARG VITE_WEB_URL
+
+ENV VITE_SERVER_URL=$VITE_SERVER_URL
+ENV VITE_WEB_URL=$VITE_WEB_URL
+
 WORKDIR /app
 
 COPY bun.lock ./
@@ -10,6 +17,9 @@ COPY apps/server/package.json ./apps/server/
 RUN bun install --frozen-lockfile
 
 COPY . .
+
+RUN echo "VITE_SERVER_URL=${VITE_SERVER_URL}" > apps/web/.env
+RUN echo "VITE_WEB_URL=${VITE_WEB_URL}" >> apps/web/.env
 
 RUN bun run build
 

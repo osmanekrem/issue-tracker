@@ -1,6 +1,7 @@
 import {createFileRoute, Outlet, redirect} from '@tanstack/react-router'
 import {SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import AppSidebar from "@/components/layout/sidebar/app-sidebar";
+import AppHeader from "@/components/layout/header/app-header";
 
 export const Route = createFileRoute('/__protected')({
     component: RouteComponent,
@@ -15,9 +16,9 @@ function RouteComponent() {
 
     return (<SidebarProvider>
         <AppSidebar/>
-        <main className="flex-1 min-w-0 h-svh flex flex-col px-2.5 md:px-10 py-6">
-
-            <div className="flex-1 min-h-0 w-full flex flex-col">
+        <main className="flex-1 min-w-0 h-svh flex flex-col ">
+        <AppHeader/>
+            <div className="flex-1 min-h-0 w-full px-2.5 md:px-10 py-6 flex flex-col">
 
                 <Outlet/>
             </div>

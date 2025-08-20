@@ -6,17 +6,10 @@ import {Badge} from "@/components/ui/badge";
 export default function SelectStatus({...props}) {
     const {data: statuses, isLoading} = useStatuses()
 
-    if (isLoading) {
-        return <Select disabled>
-            <SelectTrigger className="w-full !h-12">
-                <SelectValue placeholder="Durumlar yükleniyor..." />
-            </SelectTrigger>
-        </Select>;
-    }
     return (
         <Select {...props} disabled={isLoading || props?.disabled}>
             <SelectTrigger className="w-full !h-12" >
-                <SelectValue placeholder="Durum Seçiniz"  />
+                <SelectValue placeholder={isLoading ? "Yükleniyor..." : "Durum Seçiniz"}  />
             </SelectTrigger>
             <SelectContent>{(
                 statuses?.data?.map((status) => (

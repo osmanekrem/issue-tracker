@@ -14,15 +14,20 @@ import useConfirm from "@/hooks/use-confirm";
 import {useMutation} from "@tanstack/react-query";
 import {deleteUser} from "@/features/user-management/lib/actions";
 import {useDeleteUser} from "@/features/user-management/lib/api";
+import type {Issue} from "@/features/issues/types";
+import {useDeleteIssue} from "@/features/issues/lib/api";
+import type {EditablePathsWithId, RoutePaths} from "@/types/router";
 
-interface Props {
-    rowData: User
+interface Props<T> {
+    rowData: T & {id:string}
+    name: string;
+    editUrl: EditablePathsWithId;
 }
 
-export default function ActionMenu({rowData}: Props) {
-    const [DeleteConfirmDialog, confirmDelete] = useConfirm("Silme Onayı", "Bu kullanıcıyı silmek istediğinize emin misiniz?", "Sil")
+export default function ActionMenu<T>({rowData, editUrl, name}: Props<T>) {
+    const [DeleteConfirmDialog, confirmDelete] = useConfirm("Silme Onayı", `Bu ${name} silmek istediğinize emin misiniz?`, "Sil")
 
-    const deleteUser = useDeleteUser(rowData.id)
+    const deleteIssue = useDeleteIssue(rowData.id)
     const copyIdToClipboard = () => {
         navigator.clipboard.writeText(rowData.id)
         toast.success("ID panoya kopyalandı!")
@@ -31,7 +36,7 @@ export default function ActionMenu({rowData}: Props) {
     const handleDelete = async () => {
         const confirmed = await confirmDelete();
         if (confirmed) {
-            await deleteUser.mutateAsync()
+            await deleteIssue.mutateAsync()
         }
     }
 
@@ -52,7 +57,7 @@ export default function ActionMenu({rowData}: Props) {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem>
-                        <Link to={"/user-management/edit-user/$id"} params={{
+                        <Link to={editUrl} params={{
                             id: rowData.id
                         }} className="gap-x-2 flex items-center w-full">
                             <PencilIcon/>

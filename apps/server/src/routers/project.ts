@@ -4,9 +4,8 @@ import {db} from "../db";
 import {project} from "../db/schema/project";
 import {successResponse} from "../utils/response";
 import {z} from "zod";
-import {count, desc, eq} from "drizzle-orm";
-import {user} from "../db/schema/auth";
-import {paginationRequestSchema} from "../schemas/pagination";
+import { eq} from "drizzle-orm";
+import {getProjects} from "@/utils/projects";
 
 export const projectRouter = router({
     createProject: protectedProcedure.input(createProjectSchema).mutation(async ({ctx, input}) => {
@@ -23,98 +22,47 @@ export const projectRouter = router({
 
         return successResponse(data[0], "Proje başarıyla oluşturuldu");
     }),
-    getProjects: protectedProcedure.query(async ({ctx}) => {
-        const data = await db.select({
-            id: project.id,
-            title: project.title,
-            description: project.description,
-            ownerId: project.ownerId,
-            createdAt: project.createdAt,
-            updatedAt: project.updatedAt,
-            owner: {
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                image: user.image,
+    getProjects: protectedProcedure.input(
+        z.object({
+            ownerId: z.string().optional(),
+            id: z.string().optional(),
+            sorting: z.object({
+                column: z.enum([
+                    'createdAt',
+                    'updatedAt',
+                ]).default('createdAt'),
+                direction: z.enum(['asc', 'desc']).default('desc')
+            }).optional(),
+            pagination: z.object({
+                limit: z.number().min(1).default(20),
+                offset: z.number().min(0).default(0)
+            }).optional()
+        })
+    ).query(async ({
+                       input
+                   }) => {
+        const data = await getProjects({
+            filters: {
+                ownerId: input.ownerId,
+                id: input.id
+            },
+            sorting: {
+                column: input.sorting?.column || 'createdAt',
+                direction: input.sorting?.direction || 'desc'
+            },
+            pagination: {
+                limit: input.pagination?.limit || 20,
+                offset: input.pagination?.offset || 0
             }
-        }).from(project).leftJoin(
-            user,
-            eq(project.ownerId, user.id),
-        ).orderBy(desc(project.createdAt));
-
-        if (!data.length) {
-            return successResponse([], "Kullanıcıya ait proje bulunamadı");
-        }
+        })
 
         return successResponse(data, "Projeler başarıyla getirildi");
     }),
-    getProjectsPaginated: protectedProcedure.input(
-        paginationRequestSchema
-    ).query(async ({ctx, input}) => {
-        const {limit, offset} = input;
-
-        const data = await db.select(
-            {
-            id: project.id,
-            title: project.title,
-            description: project.description,
-            ownerId: project.ownerId,
-            createdAt: project.createdAt,
-            updatedAt: project.updatedAt,
-            owner: {
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                image: user.image,
-            }
-        }).from(project)
-            .orderBy(desc(project.createdAt))
-                .limit(limit).offset(offset)
-            .leftJoin(
-                user,
-                eq(project.ownerId, user.id),
-            )
-
-        if (!data.length) {
-            return successResponse({
-                items: [],
-                total: 0,
-            }, "Kullanıcıya ait proje bulunamadı");
-        }
-
-        const [{count: totalCount}] = await db.select({count: count()}).from(project)
-
-        return successResponse({
-            items: data,
-            total: totalCount,
-        }, "Projeler başarıyla getirildi");
-    }),
     getProjectById: protectedProcedure.input(z.string()).query(async ({ctx, input}) => {
-        const data = await db.select({
-            id: project.id,
-            title: project.title,
-            description: project.description,
-            ownerId: project.ownerId,
-            createdAt: project.createdAt,
-            updatedAt: project.updatedAt,
-            owner: {
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                image: user.image,
-            }
-        }).from(project).where(eq(
-            project.id,
-            input,
-        ))
-            .leftJoin(
-                user,
-                eq(project.ownerId, user.id),
-            )
-            .limit(1);
+        const {items:data} = await getProjects({
+            filters: {id: input},
+            pagination: {limit: 1, offset: 0}
+        })
 
         if (!data.length || !data[0]) {
             throw new Error("Proje bulunamadı");
@@ -146,13 +94,4 @@ export const projectRouter = router({
 
         return successResponse(data[0], "Proje başarıyla güncellendi");
     }),
-    getProjectsByOwnerId: protectedProcedure.input(z.string()).query(async ({ctx, input}) => {
-        const data = await db.select().from(project).where(eq(project.ownerId, input)).orderBy(desc(project.createdAt));
-
-        if (!data.length) {
-            return successResponse([], "Kullanıcıya ait proje bulunamadı");
-        }
-
-        return successResponse(data, "Projeler başarıyla getirildi");
-    })
 })

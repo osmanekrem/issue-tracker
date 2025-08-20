@@ -5,16 +5,10 @@ import {useProjects} from "@/features/projects/lib/api";
 export default function SelectProject({...props}) {
     const {data: projects, isLoading} = useProjects()
 
-    if (isLoading) {
-        return <Select disabled><SelectTrigger className="w-full !h-12">
-                <SelectValue placeholder="Projeler yükleniyor..." />
-            </SelectTrigger>
-        </Select>;
-    }
     return (
         <Select {...props} disabled={isLoading || props?.disabled}>
             <SelectTrigger className="w-full !h-12" >
-                <SelectValue placeholder="Proje Seçiniz"  />
+                <SelectValue placeholder={isLoading ? "Yükleniyor..." : "Proje Seçiniz"}  />
             </SelectTrigger>
             <SelectContent>{(
                 projects?.data?.items.map((project) => (
